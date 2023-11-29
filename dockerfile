@@ -1,20 +1,15 @@
-# Use an official Node runtime as a base image
-FROM node:14-alpine
+# Use a lightweight base image
+FROM nginx:alpine
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+# Set the working directory
+WORKDIR /usr/share/nginx/html
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Copy HTML files and assets to the working directory
+COPY index.html .
+COPY assets/ assets/
 
-# Install app dependencies
-RUN npm install
+# Expose port 80
+EXPOSE 80
 
-# Copy the application code to the container
-COPY . .
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Define the command to run your application
-CMD ["npm", "start"]
+# Start Nginx server in the foreground
+CMD ["nginx", "-g", "daemon off;"]
